@@ -1,5 +1,5 @@
-import { Expense, User, Item, PriceHistoryPoint, Category } from './types';
-import { CATEGORIES } from './constants';
+import { Expense, User, Item, PriceHistoryPoint, Category } from '../types';
+import { CATEGORIES } from '../constants';
 import apiRequest from './api';
 
 // --- Auth ---

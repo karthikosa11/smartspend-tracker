@@ -19,8 +19,17 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // CORS configuration
+const getCorsOrigin = () => {
+  // In production, use FRONTEND_URL or extract from VITE_API_URL
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.FRONTEND_URL || process.env.VITE_API_URL?.replace('/api', '') || '*';
+  }
+  // In development, always allow localhost:3000 (frontend dev server)
+  return 'http://localhost:3000';
+};
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || process.env.VITE_API_URL?.replace('/api', '') || '*',
+  origin: getCorsOrigin(),
   credentials: true,
 };
 
