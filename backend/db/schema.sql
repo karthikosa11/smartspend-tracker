@@ -1,0 +1,46 @@
+-- SmartSpend Database Schema
+
+CREATE DATABASE IF NOT EXISTS smartspend;
+USE smartspend;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id VARCHAR(36) PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  username VARCHAR(255),
+  password VARCHAR(255) NOT NULL,
+  role ENUM('USER', 'ADMIN') DEFAULT 'USER',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_email (email)
+);
+
+-- Items table
+CREATE TABLE IF NOT EXISTS items (
+  id VARCHAR(36) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  default_category_id VARCHAR(36),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_name (name)
+);
+
+-- Expenses table
+CREATE TABLE IF NOT EXISTS expenses (
+  id VARCHAR(36) PRIMARY KEY,
+  user_id VARCHAR(36) NOT NULL,
+  item_id VARCHAR(36) NOT NULL,
+  item_name VARCHAR(255) NOT NULL,
+  amount DECIMAL(10, 2) NOT NULL,
+  date DATE NOT NULL,
+  category_id VARCHAR(36) NOT NULL,
+  receipt_image_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE SET NULL,
+  INDEX idx_user_id (user_id),
+  INDEX idx_date (date),
+  INDEX idx_item_name (item_name)
+);
+
