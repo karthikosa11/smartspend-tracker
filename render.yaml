@@ -2,18 +2,29 @@ services:
   - type: web
     name: smartspend-backend
     env: node
+    region: oregon
+    plan: starter
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 5000
-    healthCheckPath: /api/health
+      # Add these in Render dashboard:
+      # DB_HOST (from database service)
+      # DB_USER (from database service)
+      # DB_PASSWORD (from database service)
+      # DB_NAME=smartspend
+      # JWT_SECRET (generate a secure random string)
+      # JWT_EXPIRES_IN=7d
+      # GEMINI_API_KEY (your Gemini API key)
+      # FRONTEND_URL (your Render service URL)
+      # VITE_API_URL (your Render service URL + /api)
 
 databases:
   - name: smartspend-db
     plan: starter
     databaseName: smartspend
-    user: smartspend_user
 
