@@ -1,13 +1,13 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { pool } from '../config/database.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
 const JWT_SECRET: string = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-const JWT_EXPIRES_IN: string = process.env.JWT_EXPIRES_IN || '7d'; // Default: 7 days
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'; // Default: 7 days
 
 // Validate email helper
 const validateEmail = (email: string): boolean => {
@@ -58,11 +58,10 @@ router.post('/signup', async (req, res) => {
     );
 
     // Generate JWT token
-    const signOptions: SignOptions = { expiresIn: JWT_EXPIRES_IN };
     const token = jwt.sign(
       { id: userId, email: normalizedEmail, role: 'USER' },
       JWT_SECRET,
-      signOptions
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     res.status(201).json({
@@ -112,11 +111,10 @@ router.post('/login', async (req, res) => {
     }
 
     // Generate JWT token
-    const signOptions: SignOptions = { expiresIn: JWT_EXPIRES_IN };
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
-      signOptions
+      { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions
     );
 
     res.json({
