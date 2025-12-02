@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
       build: {
         outDir: 'dist',
         sourcemap: false,
-        minify: 'terser',
+        minify: 'esbuild', // Changed from 'terser' - esbuild is faster and included with Vite
       }
     };
 });
